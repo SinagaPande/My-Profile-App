@@ -1,4 +1,4 @@
-package com.itera.myapplication
+package com.itera.profileapp
 
 import org.junit.Test
 

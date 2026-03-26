@@ -5,13 +5,13 @@ plugins {
 }
 
 android {
-    namespace = "com.itera.myapplication"
+    namespace = "com.itera.profileapp"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.itera.myapplication"
+        applicationId = "com.itera.profileapp"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -42,6 +42,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

@@ -1,4 +1,4 @@
-package com.itera.myapplication
+package com.itera.profileapp
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*  // <-- GANTI DENGAN INI
@@ -11,6 +11,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 data class Profile(
     val name: String,
@@ -19,6 +27,61 @@ data class Profile(
     val phone: String,
     val location: String
 )
+
+@Composable
+fun EditProfileDialog(
+    initialName: String,
+    initialBio: String,
+    onDismiss: () -> Unit,
+    onSave: (String, String) -> Unit
+) {
+    // State sementara untuk menyimpan ketikan user sebelum tombol Save ditekan
+    var nameText by remember { mutableStateOf(initialName) }
+    var bioText by remember { mutableStateOf(initialBio) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss, // Dipanggil jika user menekan area luar dialog
+        title = {
+            Text(text = "Edit Profile", fontWeight = FontWeight.Bold)
+        },
+        text = {
+            Column(
+                modifier = Modifier.padding(vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                // State Hoisting: OutlinedTextField tidak menyimpan state, 
+                // ia hanya membaca 'nameText' dan memanggil 'onValueChange'
+                OutlinedTextField(
+                    value = nameText,
+                    onValueChange = { nameText = it },
+                    label = { Text("Name") },
+                    singleLine = true
+                )
+
+                OutlinedTextField(
+                    value = bioText,
+                    onValueChange = { bioText = it },
+                    label = { Text("Bio") }
+                )
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = { 
+                    // Mengirim data yang sudah diketik ke atas (ke pemanggil komponen ini)
+                    onSave(nameText, bioText) 
+                }
+            ) {
+                Text("Save")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
+}
 
 @Composable
 fun ProfileHeader(name: String) {

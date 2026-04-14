@@ -31,11 +31,18 @@ graph TD
 ## 📸 Screenshots
 
 Berikut adalah tampilan antarmuka aplikasi:
-![image](Screenshoot\Screenshot 2026-04-14 170408.png) 
-![image](Screenshoot\Screenshot 2026-04-14 170414.png) 
-![image](Screenshoot\Screenshot 2026-04-14 170426.png)
-![image](Screenshoot\Screenshot 2026-04-14 170436.png) 
-![image](Screenshoot\Screenshot 2026-04-14 170443.png) 
+
+### Layar Utama (Bottom Navigation)
+
+| Notes Screen | Favorites Screen | Profile Screen |
+| :---: | :---: | :---: |
+| ![Notes](Screenshoot/Screenshot%202026-04-14%20170408.png) | ![Favorites](Screenshoot/Screenshot%202026-04-14%20170436.png) | ![Profile](Screenshoot/Screenshot%202026-04-14%20170443.png) |
+
+### Layar Form & Detail
+
+| Add Note Screen | Note Detail Screen |
+| :---: | :---: |
+| ![Add Note](Screenshoot/Screenshot%202026-04-14%20170414.png) | ![Note Detail](Screenshoot/Screenshot%202026-04-14%20170426.png) |
 
 ## ✨ Fitur Utama
 

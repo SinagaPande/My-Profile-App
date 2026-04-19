@@ -16,11 +16,17 @@ import androidx.navigation.navArgument
 import com.itera.profileapp.ProfileScreen // Tambahkan import ini
 import com.itera.profileapp.ProfileViewModel // Tambahkan import ini
 import com.itera.profileapp.ui.screens.*
+import com.itera.profileapp.NoteViewModel
+import com.itera.profileapp.ui.screens.NotesScreen
+import com.itera.profileapp.ui.screens.AddNoteScreen
+import com.itera.profileapp.ui.screens.NoteDetailScreen
+import com.itera.profileapp.ui.screens.EditNoteScreen
 
 @Composable
 fun AppNavigation(
     navController: NavHostController = rememberNavController(),
-    profileViewModel: ProfileViewModel // Tambahkan parameter ini
+    profileViewModel: ProfileViewModel,
+    noteViewModel: NoteViewModel
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -78,7 +84,9 @@ fun AppNavigation(
         ) {
             // 1. Tab Notes
             composable(Screen.Notes.route) {
+                // Nanti kita akan update parameter NotesScreen di Step 6
                 NotesScreen(
+                    viewModel = noteViewModel, // Tambahkan ini
                     onNavigateToDetail = { noteId -> navController.navigate(Screen.NoteDetail.createRoute(noteId)) },
                     onNavigateToAdd = { navController.navigate(Screen.AddNote.route) }
                 )
@@ -100,6 +108,7 @@ fun AppNavigation(
                 val noteId = backStackEntry.arguments?.getString("noteId") ?: ""
                 NoteDetailScreen(
                     noteId = noteId,
+                    viewModel = noteViewModel, // Parameter baru
                     onNavigateToEdit = { id -> navController.navigate(Screen.EditNote.createRoute(id)) },
                     onNavigateBack = { navController.popBackStack() }
                 )
@@ -107,7 +116,10 @@ fun AppNavigation(
 
             // 5. Add Note
             composable(Screen.AddNote.route) {
-                AddNoteScreen(onNavigateBack = { navController.popBackStack() })
+                AddNoteScreen(
+                    onSaveNote = { title, content -> noteViewModel.addNote(title, content) },
+                    onNavigateBack = { navController.popBackStack() }
+                )
             }
 
             // 6. Edit Note
@@ -118,6 +130,7 @@ fun AppNavigation(
                 val noteId = backStackEntry.arguments?.getString("noteId") ?: ""
                 EditNoteScreen(
                     noteId = noteId,
+                    viewModel = noteViewModel, // Parameter baru
                     onNavigateBack = { navController.popBackStack() }
                 )
             }

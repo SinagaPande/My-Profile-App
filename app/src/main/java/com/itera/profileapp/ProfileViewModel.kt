@@ -1,14 +1,16 @@
 package com.itera.profileapp
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.itera.profileapp.data.repository.UserPreferencesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-// 1. Data Class untuk menyimpan seluruh state layar
 data class ProfileUiState(
-    val name: String = "Jonathan Sinaga | 123140153",
+    val name: String = "Jonathan Sinaga | 123140153", // Sesuaikan dengan data Anda
     val bio: String = "Mahasiswa Informatika ITERA | Mobile Developer",
     val email: String = "jonathan.123140153@student.itera.ac.id",
     val phone: String = "+62 812-3456-7890",
@@ -16,31 +18,33 @@ data class ProfileUiState(
     val isDarkMode: Boolean = false
 )
 
-// 2. Class ViewModel
-class ProfileViewModel : ViewModel() {
-    
-    // _uiState bersifat "Private" dan "Mutable" (bisa diubah), hanya dikelola di dalam ViewModel.
+class ProfileViewModel(
+    private val preferencesRepository: UserPreferencesRepository
+) : ViewModel() {
+
     private val _uiState = MutableStateFlow(ProfileUiState())
-    
-    // uiState bersifat "Public" dan "Read-only" (hanya bisa dibaca). UI akan mengobservasi variabel ini.
     val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
 
-    // Fungsi yang akan dipanggil saat tombol Save ditekan
-    fun updateProfile(newName: String, newBio: String) {
-        _uiState.update { currentState ->
-            currentState.copy(
-                name = newName,
-                bio = newBio
-            )
+    init {
+        // Membaca status Dark Mode dari DataStore saat ViewModel dibuat
+        viewModelScope.launch {
+            preferencesRepository.isDarkMode.collect { isDark ->
+                _uiState.update { it.copy(isDarkMode = isDark) }
+            }
         }
     }
 
-    // Fungsi yang akan dipanggil saat Switch/Toggle ditekan
-    fun toggleDarkMode() {
+    fun updateProfile(newName: String, newBio: String) {
         _uiState.update { currentState ->
-            currentState.copy(
-                isDarkMode = !currentState.isDarkMode
-            )
+            currentState.copy(name = newName, bio = newBio)
+        }
+    }
+
+    fun toggleDarkMode() {
+        viewModelScope.launch {
+            // Simpan status baru ke DataStore (nilai UI akan otomatis ter-update lewat collect di init)
+            val currentMode = _uiState.value.isDarkMode
+            preferencesRepository.toggleDarkMode(!currentMode)
         }
     }
 }

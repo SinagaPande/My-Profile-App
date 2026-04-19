@@ -1,55 +1,68 @@
-# Notes App (Android)
+# 📝 Notes App (Offline-First)
 
-Aplikasi pencatatan (Notes App) berbasis Android yang dibangun menggunakan **Jetpack Compose**. Proyek ini merupakan pengembangan dari tugas sebelumnya dengan penambahan sistem navigasi yang lengkap, parameter antarlayar, dan manajemen tema (Dark/Light Mode).
+Aplikasi pencatatan (Notes App) modern berbasis Android yang dibangun sepenuhnya menggunakan **Jetpack Compose**. Aplikasi ini dirancang dengan prinsip **Offline-First**, memastikan pengguna dapat membuat, membaca, memperbarui, dan menghapus catatan tanpa memerlukan koneksi internet, serta menyimpan preferensi pengguna secara lokal.
 
-## 🗺️ Alur Navigasi (Navigation Flow)
+👤 **Pengembang:** Jonathan Sinaga (123140153)
 
-Diagram di bawah ini menjelaskan bagaimana perpindahan layar (screen) di dalam aplikasi:
+---
 
-```mermaid
-graph TD
-    subgraph Bottom_Navigation
-        Notes[Notes List Screen]
-        Fav[Favorites Screen]
-        Prof[Profile Screen]
-    end
+## 🎥 Video Demo
+Klik tautan di bawah ini untuk melihat demonstrasi singkat (45 detik) dari fitur utama aplikasi (CRUD, Search, Sort, dan Dark Mode) dalam keadaan *offline*:
 
-    Notes <--> Fav
-    Fav <--> Prof
-    Prof <--> Notes
+👉 **[Tonton Video Demo Aplikasi](https://drive.google.com/file/d/1dcqfOz8UsCtcZmQPUWGpEzRgRT69UI37/view?usp=sharing)**
 
-    Notes -->|FAB Click| Add[Add Note Screen]
-    Notes -->|Note Click| Detail[Note Detail Screen <br/> argument: noteId]
-    
-    Detail -->|Edit Click| Edit[Edit Note Screen <br/> argument: noteId]
-    
-    Add -->|Back| Notes
-    Detail -->|Back| Notes
-    Edit -->|Back| Detail
-````
+---
 
-## 📸 Screenshots
+## ✨ Fitur Utama (Rubrik Penilaian)
 
-Berikut adalah tampilan antarmuka aplikasi:
-![image](Screenshoot\Screenshot 2026-04-14 170408.png) 
-![image](Screenshoot\Screenshot 2026-04-14 170414.png) 
-![image](Screenshoot\Screenshot 2026-04-14 170426.png)
-![image](Screenshoot\Screenshot 2026-04-14 170436.png) 
-![image](Screenshoot\Screenshot 2026-04-14 170443.png) 
+* ✅ **SQLDelight Database (20%):** Skema database lokal yang aman dan *type-safe* untuk menyimpan data catatan.
+* ✅ **CRUD Operations (25%):** Fungsionalitas penuh untuk Menambah, Membaca, Mengubah, dan Menghapus catatan.
+* ✅ **DataStore Settings (15%):** Penyimpanan preferensi pengguna secara persisten menggunakan `Preferences DataStore` (Tema Gelap/Terang & Urutan Catatan).
+* ✅ **Search Feature (15%):** Pencarian catatan secara *real-time* menggunakan query SQL `LIKE` langsung dari database.
+* ✅ **UI/UX & Sort (15%):** Antarmuka yang bersih menggunakan Material Design 3, *State Management* (Loading, Empty, Success), serta kemampuan mengurutkan catatan (Terbaru/Terlama).
+* ✅ **Code Quality (10%):** Arsitektur rapi menggunakan konsep MVVM (Model-View-ViewModel), *Clean Architecture* sederhana, dan *Kotlin Flow/StateFlow* untuk *reactive programming*.
 
-## ✨ Fitur Utama
+---
 
-  * **Bottom Navigation**: Akses cepat ke tab Notes, Favorites, dan Profile.
-  * **Navigation with Arguments**: Mengirimkan data `noteId` dari daftar catatan ke layar detail dan edit.
-  * **Floating Action Button (FAB)**: Navigasi langsung ke layar tambah catatan.
-  * **Dark Mode Support**: Tema aplikasi yang sinkron dengan pengaturan profil.
-  * **Back Stack Management**: Sistem navigasi kembali (back button) yang terstruktur dan benar.
+## 🛠️ Teknologi & Arsitektur
 
-## 🛠️ Teknologi yang Digunakan
+* **UI Toolkit:** Jetpack Compose (Material 3)
+* **Arsitektur:** MVVM (Model-View-ViewModel)
+* **Database:** SQLDelight (SQLite lokal)
+* **Preferences:** Jetpack DataStore Preferences
+* **Asynchronous:** Kotlin Coroutines & Flow
+* **Navigasi:** Jetpack Navigation Compose
 
-  * **Kotlin**: Bahasa pemrograman utama.
-  * **Jetpack Compose**: Untuk membangun UI secara deklaratif.
-  * **Navigation Compose**: Library untuk menangani perpindahan antar layar.
-  * **ViewModel & StateFlow**: Untuk manajemen state dan logika bisnis.
-  * **Material Design 3**: Komponen UI standar Google terbaru.
+---
 
+## 📸 Tangkapan Layar (Screenshots)
+
+*(Pastikan folder `Screeshoot` berada di root repository ini agar gambar dapat dimuat)*
+
+| Keadaan Kosong (Empty State) | Daftar Catatan (Notes List) | Detail Catatan & Hapus |
+|:---:|:---:|:---:|
+| <img src="Screeshoot/Screenshot%202026-04-20%20000808.png" width="250"> | <img src="Screeshoot/Screenshot%202026-04-20%20000903.png" width="250"> | <img src="Screeshoot/Screenshot%202026-04-20%20000933.png" width="250"> |
+
+| Tambah Catatan (Create) | Edit Catatan (Update) | Pencarian & Filter (Search) |
+|:---:|:---:|:---:|
+| <img src="Screeshoot/Screenshot%202026-04-20%20000856.png" width="250"> | <img src="Screeshoot/Screenshot%202026-04-20%20000945.png" width="250"> | <img src="Screeshoot/Screenshot%202026-04-20%20001033.png" width="250"> |
+
+---
+
+## 📂 Struktur Proyek Utama
+
+```text
+app/src/main/
+├── java/com/itera/profileapp/
+│   ├── data/
+│   │   ├── local/DatabaseDriverFactory.kt
+│   │   └── repository/
+│   │       ├── NoteRepository.kt (Operasi DB SQLDelight)
+│   │       └── UserPreferencesRepository.kt (DataStore Preferences)
+│   ├── navigation/AppNavigation.kt (Rute Layar)
+│   ├── ui/screens/NoteScreens.kt (Komponen Layar Catatan)
+│   ├── MainActivity.kt
+│   ├── NoteViewModel.kt (Logika Bisnis Catatan)
+│   └── ProfileViewModel.kt (Logika Bisnis Profil & Tema)
+└── sqldelight/com/itera/profileapp/data/local/
+    └── Note.sq (Skema & Query SQLDelight)

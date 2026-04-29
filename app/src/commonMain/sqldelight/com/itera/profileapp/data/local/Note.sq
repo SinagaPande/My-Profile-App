@@ -1,0 +1,24 @@
+CREATE TABLE NoteEntity (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    createdAt INTEGER NOT NULL DEFAULT 0
+);
+
+getAllNotes:
+SELECT * FROM NoteEntity;
+
+searchNotes:
+SELECT * FROM NoteEntity WHERE title LIKE ? OR content LIKE ?;
+
+getNoteById:
+SELECT * FROM NoteEntity WHERE id = ?;
+
+insertNote:
+INSERT INTO NoteEntity (title, content, createdAt) VALUES (?, ?, ?);
+
+deleteNote:
+DELETE FROM NoteEntity WHERE id = ?;
+
+updateNote:
+UPDATE NoteEntity SET title = ?, content = ? WHERE id = ?;

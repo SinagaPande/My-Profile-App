@@ -1,40 +1,86 @@
-# Profile App - Tugas Praktikum Minggu 8 📱
+# Tugas Pertemuan 10 - Testing dan Dependency Injection
 
-[cite_start]Aplikasi **Profile App** ini dikembangkan menggunakan **Kotlin Multiplatform (KMP)** dan **Compose Multiplatform** untuk mendemonstrasikan implementasi fitur spesifik platform menggunakan pola `expect/actual` dan manajemen dependensi dengan **Koin DI**[cite: 9, 502].
+**Mata Kuliah:** Pengembangan Aplikasi Mobile  
+**Program Studi:** Teknik Informatika ITERA  
+**Tahun Akademik:** Genap 2025/2026
 
-## 👤 Informasi Mahasiswa
-* **Nama:** Jonathan Sinaga
-* **NIM:** 123140153
-* [cite_start]**Program Studi:** Teknik Informatika - ITERA [cite: 6, 7]
+---
 
-## [cite_start]🎯 Pemenuhan Tugas & Rubrik [cite: 514, 515]
-* [cite_start]**Koin Dependency Injection (25%)**: Implementasi Koin untuk menyuntikkan *dependencies* seperti `NoteRepository`, `DeviceInfo`, dan `NetworkMonitor` secara otomatis[cite: 503, 508].
-* [cite_start]**Expect/Actual Pattern (25%)**: Penggunaan pola `expect/actual` untuk mengakses API native pada Android dan iOS[cite: 504, 505].
-* [cite_start]**UI Integration (20%)**: Menampilkan informasi perangkat di layar *Settings* dan indikator status jaringan *real-time* di layar utama[cite: 506, 507].
-* **Architecture (20%)**: Struktur kode yang bersih dengan pemisahan antara `commonMain` untuk logika bisnis dan `androidMain` untuk implementasi platform.
-* [cite_start]**Bonus (10%)**: Implementasi `BatteryInfo` menggunakan pola `expect/actual` untuk memantau status baterai perangkat[cite: 516, 517].
+## 📋 Daftar Test Cases
 
-## [cite_start]🏗️ Diagram Arsitektur [cite: 511]
-Aplikasi ini mengikuti arsitektur **MVVM (Model-View-ViewModel)** yang terintegrasi dengan KMP:
-1. **UI Layer**: Menggunakan Compose Multiplatform.
-2. **Logic Layer**: ViewModel di `commonMain`.
-3. **Platform Layer**: Implementasi native (`androidMain`) melalui pola `expect/actual`.
-4. **DI Layer**: Koin sebagai pengatur *lifecycle* objek.
+### 1. Unit Test - NoteRepository (6 test cases)
+| No | Test Case | Status |
+|----|-----------|--------|
+| 1 | test insertNote adds note successfully | ✅ Passed |
+| 2 | test deleteNoteById removes correct note | ✅ Passed |
+| 3 | test getNoteById returns correct note | ✅ Passed |
+| 4 | test getNoteById returns null for non-existent id | ✅ Passed |
+| 5 | test updateNote modifies existing note | ✅ Passed |
+| 6 | test searchNotes filters by title | ✅ Passed |
 
-## [cite_start]🖼️ Screenshots [cite: 511]
+### 2. Flow Test dengan Turbine (5 test cases)
+| No | Test Case | Status |
+|----|-----------|--------|
+| 1 | searchNotes emits new values when notes are added | ✅ Passed |
+| 2 | searchNotes emits updated values when note is deleted | ✅ Passed |
+| 3 | searchNotes with query filters results dynamically | ✅ Passed |
+| 4 | searchNotes with empty query returns all notes | ✅ Passed |
+| 5 | searchNotes flow completes when repository is cleared | ✅ Passed |
 
-| Main Screen (Network Indicator) | Settings Screen (Device Info) |
-| :---: | :---: |
-| <img src="Screeshoot/Screenshot%202026-04-29%20225643.png" width="300"/> | <img src="Screeshoot/Screenshot%202026-04-29%20225705.png" width="300"/> |
+### 3. Unit Test - NotesViewModel dengan MockK (5 test cases)
+| No | Test Case | Status |
+|----|-----------|--------|
+| 1 | addNote calls repository insertNote | ✅ Passed |
+| 2 | deleteNote calls repository deleteNoteById | ✅ Passed |
+| 3 | getNote returns correct note from repository | ✅ Passed |
+| 4 | updateNote calls repository updateNote | ✅ Passed |
+| 5 | onSearchQueryChange updates searchQuery state | ✅ Passed |
 
-## [cite_start]🎥 Video Demo [cite: 511]
-Kamu dapat mengakses video demonstrasi aplikasi (menampilkan Koin DI, Device Info, dan Network Status) melalui tautan di bawah ini:
+### 4. UI Test - NotesScreen (6 test cases)
+| No | Test Case | Status |
+|----|-----------|--------|
+| 1 | notes list displays all notes when state is Success | ✅ Passed |
+| 2 | empty state shows Catatan tidak ditemukan message | ✅ Passed |
+| 3 | loading state shows CircularProgressIndicator | ✅ Passed |
+| 4 | error state shows error message | ✅ Passed |
+| 5 | click FAB triggers onNavigateToAdd | ✅ Passed |
+| 6 | click note card triggers onNavigateToDetail | ✅ Passed |
 
-👉 **[Link Video Demo Praktikum Minggu 8](https://drive.google.com/file/d/1nERRGJz1Q7W_Fk3doyKGGrMA-UbCvBLA/view?usp=sharing)**
+---
 
-## 🛠️ Cara Menjalankan
-1. [cite_start]Pastikan branch berada di `week-8`[cite: 510].
-2. Buka proyek di Android Studio.
-3. Jalankan `gradle sync`.
-4. Run aplikasi di emulator atau perangkat Android.
+## 📸 Test Summary
 
+![Test Summary](Screenshot/Test%20Summary.png)
+
+---
+
+## 📸 Test Execution Result
+
+![testDebugUnitTest](Screenshot/testDebugUnitTest.png)
+
+---
+
+## 📊 Code Coverage
+
+**Business Logic Coverage:** ≥ 60% (memenuhi target)
+
+*Screenshot coverage dapat dilihat di atas*
+
+---
+
+## 🎥 Video Demo
+
+[Klik di sini untuk menonton video demo](https://drive.google.com/file/d/1JRwnrr9dT8_-2qPz3ZfdClOq9U2JZdR3/view?usp=sharing)
+
+> Video berisi: Menjalankan semua test dan menunjukkan hasilnya (durasi 45 detik)
+
+---
+
+## 🛠️ Setup Koin DI
+
+Modules yang dikonfigurasi di `AppModule.kt`:
+
+| Module | Component |
+|--------|-----------|
+| Data Module | `NoteRepository` |
+| ViewModel Module | `NoteViewModel`, `ProfileViewModel` |

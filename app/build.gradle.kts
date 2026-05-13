@@ -40,6 +40,15 @@ kotlin {
             implementation(libs.androidx.datastore.preferences)
             implementation("androidx.navigation:navigation-compose:2.7.7")
         }
+
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+            implementation("app.cash.turbine:turbine:1.0.0")
+            implementation("io.mockk:mockk:1.13.9")
+            implementation("io.insert-koin:koin-test:3.5.3")
+            implementation("io.insert-koin:koin-test-junit4:3.5.3")
+        }
     }
 }
 
@@ -64,7 +73,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     
-    // Arahkan resources ke main/res
     sourceSets["main"].res.srcDirs("src/main/res")
 }
 

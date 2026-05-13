@@ -23,7 +23,8 @@ val appModule = module {
     single { DatabaseDriverFactory(androidContext()).createDriver() }
     single { NotesDatabase(get()) }
     
-    single<NoteRepositoryInterface> { NoteRepository(get()) }
+    // Perbaikan: NoteRepository tidak但有 parameter
+    single<NoteRepositoryInterface> { NoteRepository() }
     single { UserPreferencesRepository(androidContext()) }
     single<PreferencesRepository> { get<UserPreferencesRepository>() }
     single<SortPreferencesRepository> { get<UserPreferencesRepository>() }
